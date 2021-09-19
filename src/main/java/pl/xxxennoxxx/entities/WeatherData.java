@@ -1,9 +1,13 @@
 package pl.xxxennoxxx.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.*;
+import java.io.Serializable;
 
 @Entity
-public class WeatherData {
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+public class WeatherData implements Serializable {
 
     @EmbeddedId
     private WeatherDataKey weatherDataKey;
@@ -19,7 +23,6 @@ public class WeatherData {
     public WeatherData(String postCode, Integer year, Integer month) {
         this.weatherDataKey = new WeatherDataKey(postCode, year, month);
     }
-
 
     public WeatherDataKey getWeatherDataKey() {
         return weatherDataKey;
@@ -67,5 +70,17 @@ public class WeatherData {
 
     public void setDailyMaxRainfall(Float dailyMaxRainfall) {
         this.dailyMaxRainfall = dailyMaxRainfall;
+    }
+
+    @Override
+    public String toString() {
+        return "WeatherData{" +
+                "weatherDataKey=" + weatherDataKey +
+                ", minTemp=" + minTemp +
+                ", avgTemp=" + avgTemp +
+                ", maxTemp=" + maxTemp +
+                ", allRainfall=" + allRainfall +
+                ", dailyMaxRainfall=" + dailyMaxRainfall +
+                '}';
     }
 }

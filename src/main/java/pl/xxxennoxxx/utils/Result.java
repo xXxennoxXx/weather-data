@@ -3,6 +3,7 @@ package pl.xxxennoxxx.utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Result {
     private static final Result POSITIVE = new Result(true);
@@ -31,6 +32,9 @@ public class Result {
         if (this.msg == null)
             this.msg = new ArrayList<String>();
         return this.msg.add(msg);
+    }
+    public String getMsg(){
+        return String.join(": ", msg);
     }
 
 }

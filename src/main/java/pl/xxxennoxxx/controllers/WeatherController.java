@@ -1,10 +1,16 @@
 package pl.xxxennoxxx.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import pl.xxxennoxxx.dtos.WeatherDTO;
+import pl.xxxennoxxx.dtos.WeatherKeyDTO;
 import pl.xxxennoxxx.entities.WeatherData;
+import pl.xxxennoxxx.entities.WeatherDataKey;
+import pl.xxxennoxxx.exeptions.NotFoundException;
 import pl.xxxennoxxx.repos.WeatherDataRepo;
+import pl.xxxennoxxx.utils.Result;
 
 import javax.jws.WebParam;
 import javax.persistence.EntityManager;
@@ -14,54 +20,76 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/weather")
 public class WeatherController {
-    @Autowired
-    private WeatherDataRepo repo;
+    private final WeatherDataRepo repo;
     @PersistenceContext
     private EntityManager em;
 
+    public WeatherController(WeatherDataRepo repo) {
+        this.repo = repo;
+    }
+
+    @GetMapping(value = "/")
+    public WeatherData getById(@RequestBody WeatherDataKey keyDTO) {
+        return isEntityExists(keyDTO.getPostCode(), keyDTO.getYear(), keyDTO.getMonth());
+    }
+
+    @GetMapping(value = "/all")
+    public List<WeatherData> getAll() {
+        return repo.findAll();
+    }
+
 
     @DeleteMapping
-    public WeatherData delete(@RequestParam("id") int id){
-        WeatherData weatherData = new WeatherData("",11,1);
-        repo.save(weatherData);
-        List<WeatherData> select_w_from_weatherData_w = em.createQuery("select w from WeatherData w", WeatherData.class).getResultList();
-        System.out.println("Size: "+select_w_from_weatherData_w.size());
-        return weatherData;
+    public WeatherData delete(@RequestBody WeatherDataKey keyDTO) {
+        WeatherData data = isEntityExists(keyDTO.getPostCode(), keyDTO.getYear(), keyDTO.getMonth());
+        repo.delete(data);
+        return data;
     }
 
     @PutMapping
-    public WeatherData add(@RequestBody WeatherDTO wd){
-        WeatherData weatherData = new WeatherData(wd.postCode,wd.year,wd.month);
+    public WeatherData add(@RequestBody WeatherDTO wd) {
+        Result result = wd.isCorrect();
+        if (!result.isPositive()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, result.getMsg());
+        }
+        WeatherData weatherData = isEntityExists(wd.postCode, wd.year, wd.month);
+        weatherData.setAvgTemp(wd.avgTemp);
+        weatherData.setMinTemp(wd.minTemp);
+        weatherData.setMaxTemp(wd.maxTemp);
+        weatherData.setAllRainfall(wd.allRainfall);
+        weatherData.setDailyMaxRainfall(wd.dailyMaxRainfall);
         repo.save(weatherData);
-        List<WeatherData> select_w_from_weatherData_w = em.createQuery("select w from WeatherData w", WeatherData.class).getResultList();
-        System.out.println("Size: "+select_w_from_weatherData_w.size());
         return weatherData;
     }
 
     @PostMapping
-    public WeatherData update(@RequestParam("id") int id){
-        WeatherData weatherData = new WeatherData("",11,1);
-        repo.save(weatherData);
-        List<WeatherData> select_w_from_weatherData_w = em.createQuery("select w from WeatherData w", WeatherData.class).getResultList();
-        System.out.println("Size: "+select_w_from_weatherData_w.size());
-        return weatherData;
+    public WeatherData update(@RequestBody WeatherDTO wd) {
+        Result result = wd.isCorrect();
+        if (!result.isPositive()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, result.getMsg());
+        }
+
+        WeatherData weatherData = new WeatherData(wd.postCode,
+                wd.year,
+                wd.month);
+        weatherData.setAvgTemp(wd.avgTemp);
+        weatherData.setMinTemp(wd.minTemp);
+        weatherData.setMaxTemp(wd.maxTemp);
+        weatherData.setAllRainfall(wd.allRainfall);
+        weatherData.setDailyMaxRainfall(wd.dailyMaxRainfall);
+
+        return repo.save(weatherData);
     }
 
-    @GetMapping(value = "/{id}")
-    public WeatherData getById( @PathVariable String id){
-        WeatherData weatherData = new WeatherData("",11,1);
-        repo.save(weatherData);
-        List<WeatherData> select_w_from_weatherData_w = em.createQuery("select w from WeatherData w", WeatherData.class).getResultList();
-        System.out.println("Size: "+select_w_from_weatherData_w.size());
-        return weatherData;
+    private WeatherData isEntityExists(String postCode, Integer year, Integer month) {
+        WeatherDataKey key = new WeatherDataKey(postCode, year, month);
+        if (!repo.existsById(key))
+            throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "No entity with id: " + postCode + ", " + year + ", " + month);
+        return repo.getById(key);
     }
 
-    @GetMapping(value = "/all")
-    public WeatherData getAll( ){
-        WeatherData weatherData = new WeatherData();
-        repo.save(weatherData);
-        List<WeatherData> select_w_from_weatherData_w = em.createQuery("select w from WeatherData w", WeatherData.class).getResultList();
-        System.out.println("Size: "+select_w_from_weatherData_w.size());
-        return weatherData;
-    }
+
 }

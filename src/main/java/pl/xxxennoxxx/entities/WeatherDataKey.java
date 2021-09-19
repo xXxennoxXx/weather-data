@@ -62,4 +62,13 @@ public class WeatherDataKey implements Serializable {
     public int hashCode() {
         return Objects.hash(postCode, year, month);
     }
+
+    @Override
+    public String toString() {
+        return "WeatherDataKey{" +
+                "postCode='" + postCode + '\'' +
+                ", year=" + year +
+                ", month=" + month +
+                '}';
+    }
 }

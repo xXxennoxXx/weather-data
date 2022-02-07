@@ -1,4 +1,4 @@
-package pl.xxxennoxxx.services.report.entities;
+package pl.xxxennoxxx.weather.data.report.entities;
 
 public class HighestTempPerMonth {
 

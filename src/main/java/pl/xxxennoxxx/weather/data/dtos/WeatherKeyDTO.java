@@ -1,4 +1,4 @@
-package pl.xxxennoxxx.dtos;
+package pl.xxxennoxxx.weather.data.dtos;
 
 public class WeatherKeyDTO {
     public String postCode;

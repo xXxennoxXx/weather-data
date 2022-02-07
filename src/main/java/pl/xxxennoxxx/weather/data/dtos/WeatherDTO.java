@@ -1,8 +1,7 @@
-package pl.xxxennoxxx.dtos;
+package pl.xxxennoxxx.weather.data.dtos;
 
 
-import com.sun.istack.NotNull;
-import pl.xxxennoxxx.utils.Result;
+import pl.xxxennoxxx.weather.data.utils.Result;
 
 public class WeatherDTO {
     public String postCode;

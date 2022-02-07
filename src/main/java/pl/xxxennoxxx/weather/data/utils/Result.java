@@ -1,9 +1,8 @@
-package pl.xxxennoxxx.utils;
+package pl.xxxennoxxx.weather.data.utils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class Result {
     private static final Result POSITIVE = new Result(true);

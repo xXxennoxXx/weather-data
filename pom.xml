@@ -68,6 +68,12 @@
             <version>2.0-groovy-3.0</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.blogspot.toomuchcoding</groupId>
+            <artifactId>spock-subjects-collaborators-extension</artifactId>
+            <version>1.2.2</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
     <build>
         <plugins>

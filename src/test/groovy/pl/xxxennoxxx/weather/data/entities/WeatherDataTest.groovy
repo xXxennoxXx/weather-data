@@ -7,6 +7,8 @@ import spock.lang.Specification
 
 import java.time.LocalDate
 
+import static java.math.BigDecimal.ONE
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.MOCK)
 class WeatherDataTest extends Specification {
 
@@ -18,11 +20,11 @@ class WeatherDataTest extends Specification {
         weatherDataRepository.saveAndFlush(new WeatherData(
                 postCode: '01-111',
                 date: LocalDate.now(),
-                minTemp: BigDecimal.ONE,
-                avgTemp: BigDecimal.ONE,
-                maxTemp: BigDecimal.ONE,
-                allRainfall: BigDecimal.ONE,
-                dailyMaxRainfall: BigDecimal.ONE
+                minTemp: ONE,
+                avgTemp: ONE,
+                maxTemp: ONE,
+                allRainfall: ONE,
+                dailyMaxRainfall: ONE
         ))
 
         then:
@@ -35,11 +37,11 @@ class WeatherDataTest extends Specification {
         weatherDataRepository.saveAndFlush(new WeatherData(
                 postCode: 'postCode',
                 date: LocalDate.now(),
-                minTemp: BigDecimal.ONE,
-                avgTemp: BigDecimal.ONE,
-                maxTemp: BigDecimal.ONE,
-                allRainfall: BigDecimal.ONE,
-                dailyMaxRainfall: BigDecimal.ONE
+                minTemp: ONE,
+                avgTemp: ONE,
+                maxTemp: ONE,
+                allRainfall: ONE,
+                dailyMaxRainfall: ONE
         ))
 
         then:
@@ -53,10 +55,10 @@ class WeatherDataTest extends Specification {
                 postCode: '11-011',
                 date: LocalDate.now(),
                 minTemp: null,
-                avgTemp: BigDecimal.ONE,
-                maxTemp: BigDecimal.ONE,
-                allRainfall: BigDecimal.ONE,
-                dailyMaxRainfall: BigDecimal.ONE
+                avgTemp: ONE,
+                maxTemp: ONE,
+                allRainfall: ONE,
+                dailyMaxRainfall: ONE
         ))
 
         then:
